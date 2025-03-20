@@ -22,6 +22,8 @@ repositories {
         name = "aikar"
         url = "https://repo.aikar.co/content/groups/aikar/"
     }
+
+    maven { url 'https://mvn.lumine.io/repository/maven-public/' }
 }
 
 dependencies {
@@ -41,8 +43,7 @@ dependencies {
     implementation "net.kyori:adventure-api:4.19.0"
     // implementation "net.kyori:adventure-text-serializer-legacy:4.19.0" // Legacy
 
-    // Paperweight
-    // paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+    compileOnly("com.ticxo.modelengine:ModelEngine:version")
 }
 
 shadowJar {
