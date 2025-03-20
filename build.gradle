@@ -54,12 +54,6 @@ shadowJar {
 
 build.dependsOn shadowJar
 
-task cleanOut(type: Delete) {
-    delete fileTree("${rootDir}/out") 
-}
-
-build.dependsOn cleanOut
-
 def targetJavaVersion = "21"
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)

@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "gradle",
+            "id": "/Users/spectra/Desktop/AcarreadosbuildAcarreados",
+            "script": "build",
+            "description": "Assembles and tests this project.",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "project": "Acarreados",
+            "buildFile": "/Users/spectra/Desktop/Acarreados/build.gradle",
+            "rootProject": "Acarreados",
+            "projectFolder": "/Users/spectra/Desktop/Acarreados",
+            "workspaceFolder": "/Users/spectra/Desktop/Acarreados",
+            "args": "",
+            "javaDebug": false,
+            "problemMatcher": [
+                "$gradle"
+            ],
+            "label": "gradle: build"
+        }
+    ]
+}
