@@ -1,0 +1,5 @@
+name: Acarreados
+version: '${version}'
+main: com.spectrasonic.Acarreados.Main
+api-version: '1.21'
+authors: [Spectrasonic]
