@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.spectrasonic"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     gradlePluginPortal()
@@ -23,7 +23,10 @@ repositories {
         url = "https://repo.aikar.co/content/groups/aikar/"
     }
 
-    maven { url 'https://mvn.lumine.io/repository/maven-public/' }
+    maven { 
+        name = "ModelEngine"
+        url = "https://mvn.lumine.io/repository/maven-public/" 
+        }
 }
 
 dependencies {
@@ -43,7 +46,7 @@ dependencies {
     implementation "net.kyori:adventure-api:4.19.0"
     // implementation "net.kyori:adventure-text-serializer-legacy:4.19.0" // Legacy
 
-    compileOnly("com.ticxo.modelengine:ModelEngine:version")
+    compileOnly "com.ticxo.modelengine:ModelEngine:R4.0.4"
 }
 
 shadowJar {
@@ -55,11 +58,6 @@ shadowJar {
 
 build.dependsOn shadowJar
 
-task cleanOut(type: Delete) {
-    delete fileTree("${rootDir}/out") 
-}
-
-build.dependsOn cleanOut
 
 def targetJavaVersion = "21"
 java {

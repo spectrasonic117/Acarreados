@@ -25,7 +25,11 @@ public class OcelotInteractListener implements Listener {
             return;
         }
 
-        clicked.remove();
+        // En lugar de remover el modelo, se mata al ocelote (se asigna 0 de salud)
+        Ocelot ocelot = (Ocelot) clicked;
+        ocelot.setHealth(0.0D);
+
+        // Se genera el item especial y se entrega al jugador
         ItemStack item = ItemBuilder.setMaterial("PAPER")
                 .setCustomModelData(1047)
                 .setName("<#5069B5><b>Pingúino</b>")

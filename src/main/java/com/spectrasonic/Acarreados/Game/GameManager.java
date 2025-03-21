@@ -2,9 +2,14 @@ package com.spectrasonic.Acarreados.Game;
 
 import com.spectrasonic.Acarreados.Main;
 import com.spectrasonic.Acarreados.Utils.Region;
+import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 @Getter
 public class GameManager {
@@ -21,7 +26,6 @@ public class GameManager {
 
     public void loadConfig() {
         plugin.reloadConfig();
-        // Lectura de la región de spawn usando el nuevo formato
         int spawnX1 = plugin.getConfig().getInt("regions.spawn.pos1.x");
         int spawnY1 = plugin.getConfig().getInt("regions.spawn.pos1.y");
         int spawnZ1 = plugin.getConfig().getInt("regions.spawn.pos1.z");
@@ -31,7 +35,6 @@ public class GameManager {
 
         spawnRegion = new Region(spawnX1, spawnY1, spawnZ1, spawnX2, spawnY2, spawnZ2);
 
-        // Lectura de la región de puntuación usando el nuevo formato
         int scoreX1 = plugin.getConfig().getInt("regions.score.pos1.x");
         int scoreY1 = plugin.getConfig().getInt("regions.score.pos1.y");
         int scoreZ1 = plugin.getConfig().getInt("regions.score.pos1.z");
@@ -39,9 +42,7 @@ public class GameManager {
         int scoreY2 = plugin.getConfig().getInt("regions.score.pos2.y");
         int scoreZ2 = plugin.getConfig().getInt("regions.score.pos2.z");
 
-        // Leer la cantidad de ocelotes a generar (con valor por defecto de 100)
         spawnCount = plugin.getConfig().getInt("spawn-count", 100);
-
         scoreRegion = new Region(scoreX1, scoreY1, scoreZ1, scoreX2, scoreY2, scoreZ2);
     }
 
@@ -55,14 +56,25 @@ public class GameManager {
     }
 
     /**
-     * Se generan 100 OCELOT dentro de la región de spawn, ubicándolos 1 bloque por
-     * encima para evitar la sofocación.
+     * Se generan spawnCount ocelotes dentro de la región de spawn, ubicándolos 1
+     * bloque por encima para evitar sofocamientos,
+     * se les aplica un efecto de invisibilidad sin partículas y se les asigna el
+     * modelo "bebe_pinguino" mediante ModelEngine.
      */
     private void spawnOcelots() {
         for (int i = 0; i < spawnCount; i++) {
             Location loc = getRandomLocationInRegion(spawnRegion);
             loc.add(0, 1, 0);
-            loc.getWorld().spawn(loc, Ocelot.class);
+            Ocelot ocelot = loc.getWorld().spawn(loc, Ocelot.class);
+
+            // Hacer invisible la entidad sin mostrar partículas
+            ocelot.setInvisible(true);
+            ocelot.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+
+            // Crear entidad modelada y asignar el modelo "bebe_pinguino"
+            ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(ocelot);
+            ActiveModel activeModel = ModelEngineAPI.createActiveModel("bebe_pinguino");
+            modeledEntity.addModel(activeModel, true);
         }
     }
 
@@ -73,7 +85,7 @@ public class GameManager {
         int minZ = Math.min(region.getZ1(), region.getZ2());
         int maxZ = Math.max(region.getZ1(), region.getZ2());
         int x = minX + (int) (Math.random() * (maxX - minX + 1));
-        int y = minY; // Se utiliza la coordenada más baja para el spawn.
+        int y = minY;
         int z = minZ + (int) (Math.random() * (maxZ - minZ + 1));
         return new Location(plugin.getServer().getWorlds().get(0), x, y, z);
     }
