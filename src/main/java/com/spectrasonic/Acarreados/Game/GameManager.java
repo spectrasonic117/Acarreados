@@ -53,6 +53,7 @@ public class GameManager {
 
     public void stopGame() {
         running = false;
+        removeAllOcelots();
     }
 
     /**
@@ -88,5 +89,11 @@ public class GameManager {
         int y = minY;
         int z = minZ + (int) (Math.random() * (maxZ - minZ + 1));
         return new Location(plugin.getServer().getWorlds().get(0), x, y, z);
+    }
+
+    private void removeAllOcelots() {
+        plugin.getServer().getWorlds().get(0).getEntities().stream()
+                .filter(entity -> entity instanceof Ocelot)
+                .forEach(entity -> entity.remove());
     }
 }
