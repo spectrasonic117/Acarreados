@@ -1,0 +1,10 @@
+regions:
+    spawn:
+        pos1: { x: -156, y: 60, z: -168 }
+        pos2: { x: -78, y: 60, z: -256 }
+
+    score:
+        pos1: { x: -128, y: 60, z: -256 }
+        pos2: { x: -106, y: 62, z: -265 }
+
+spawn-count: 100
