@@ -3,6 +3,7 @@ package com.spectrasonic.Acarreados.Listeners;
 import com.spectrasonic.Acarreados.Utils.SoundUtils;
 import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Utils.MessageUtils;
+import com.spectrasonic.Acarreados.Utils.PointsManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,9 +15,11 @@ import org.bukkit.inventory.ItemStack;
 public class BlockInteractListener implements Listener {
 
     private final GameManager gameManager;
+    private final PointsManager pointsManager;
 
-    public BlockInteractListener(GameManager gameManager) {
+    public BlockInteractListener(GameManager gameManager, PointsManager pointsManager) {
         this.gameManager = gameManager;
+        this.pointsManager = pointsManager;
     }
 
     @EventHandler
@@ -35,6 +38,9 @@ public class BlockInteractListener implements Listener {
 
         SoundUtils.playerSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
         MessageUtils.sendActionBar(player, "<green>Has puntuado!</green>");
+
+        // ponint manager
+        pointsManager.addPoints(player, 1);
 
         removeCustomPaper(player);
     }
