@@ -6,16 +6,19 @@ import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Listeners.BlockInteractListener;
 import com.spectrasonic.Acarreados.Listeners.OcelotInteractListener;
 import com.spectrasonic.Acarreados.Utils.MessageUtils;
+import com.spectrasonic.Acarreados.Utils.PointsManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Main extends JavaPlugin {
 
     private GameManager gameManager;
+    private PointsManager pointsManager;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         gameManager = new GameManager(this);
+        pointsManager = new PointsManager(this);
         registerCommands();
         registerEvents();
         MessageUtils.sendStartupMessage(this);
@@ -33,6 +36,10 @@ public final class Main extends JavaPlugin {
 
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(new OcelotInteractListener(), this);
-        getServer().getPluginManager().registerEvents(new BlockInteractListener(gameManager), this);
+        getServer().getPluginManager().registerEvents(new BlockInteractListener(gameManager, pointsManager), this);
+    }
+
+    public PointsManager getPointsManager() {
+        return pointsManager;
     }
 }
