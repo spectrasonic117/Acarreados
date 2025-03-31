@@ -27,9 +27,7 @@ repositories {
         name = "ModelEngine"
         url = "https://mvn.lumine.io/repository/maven-public/" 
         }
-    maven {
-        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
-    }
+
 }
 
 dependencies {
@@ -51,7 +49,6 @@ dependencies {
 
     compileOnly "com.ticxo.modelengine:ModelEngine:R4.0.4"
 
-    compileOnly 'me.clip:placeholderapi:2.11.6'
 }
 
 shadowJar {
