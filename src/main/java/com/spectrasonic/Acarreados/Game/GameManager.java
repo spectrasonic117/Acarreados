@@ -6,23 +6,22 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 @Getter
+@RequiredArgsConstructor
 public class GameManager {
+
     private final Main plugin;
     private boolean running;
     private Region spawnRegion;
     private Region scoreRegion;
     private int spawnCount;
-
-    public GameManager(Main plugin) {
-        this.plugin = plugin;
-        loadConfig();
-    }
 
     public void loadConfig() {
         plugin.reloadConfig();
