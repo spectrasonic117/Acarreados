@@ -79,6 +79,12 @@ public class GameManager {
         }
     }
 
+    private void removeAllOcelots() {
+        plugin.getServer().getWorlds().get(0).getEntities().stream()
+                .filter(entity -> entity instanceof Ocelot)
+                .forEach(entity -> entity.remove());
+    }
+
     private Location getRandomLocationInRegion(Region region) {
         int minX = Math.min(region.getX1(), region.getX2());
         int maxX = Math.max(region.getX1(), region.getX2());
@@ -91,9 +97,21 @@ public class GameManager {
         return new Location(plugin.getServer().getWorlds().get(0), x, y, z);
     }
 
-    private void removeAllOcelots() {
-        plugin.getServer().getWorlds().get(0).getEntities().stream()
-                .filter(entity -> entity instanceof Ocelot)
-                .forEach(entity -> entity.remove());
+    public void respawnOcelot() {
+        if (!running)
+            return;
+
+        Location loc = getRandomLocationInRegion(spawnRegion);
+        loc.add(0, 1, 0);
+        Ocelot ocelot = loc.getWorld().spawn(loc, Ocelot.class);
+
+        // Hacer invisible la entidad sin mostrar partículas
+        ocelot.setInvisible(true);
+        ocelot.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+
+        // Crear entidad modelada y asignar el modelo "bebe_pinguino"
+        ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(ocelot);
+        ActiveModel activeModel = ModelEngineAPI.createActiveModel("bebe_pinguino");
+        modeledEntity.addModel(activeModel, true);
     }
 }

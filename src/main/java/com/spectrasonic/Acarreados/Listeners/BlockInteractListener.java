@@ -37,7 +37,7 @@ public class BlockInteractListener implements Listener {
             return;
 
         SoundUtils.playerSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
-        MessageUtils.sendActionBar(player, "<green>Has puntuado!</green>");
+        MessageUtils.sendActionBar(player, "<green><bold>+1 Punto");
 
         // ponint manager
         pointsManager.addPoints(player, 1);

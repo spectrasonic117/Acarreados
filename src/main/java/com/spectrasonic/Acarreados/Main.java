@@ -35,7 +35,7 @@ public final class Main extends JavaPlugin {
     }
 
     public void registerEvents() {
-        getServer().getPluginManager().registerEvents(new OcelotInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new OcelotInteractListener(gameManager), this);
         getServer().getPluginManager().registerEvents(new BlockInteractListener(gameManager, pointsManager), this);
     }
 
