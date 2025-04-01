@@ -8,6 +8,7 @@ import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Main;
 import com.spectrasonic.Acarreados.Utils.MessageUtils;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 @CommandAlias("acarreados")
 public class GameCommand extends BaseCommand {
@@ -23,11 +24,14 @@ public class GameCommand extends BaseCommand {
     @Subcommand("game")
     @CommandCompletion("start|stop")
     public void onGame(CommandSender sender, String mode) {
+        Player player = (Player) sender;
         if (mode.equalsIgnoreCase("start")) {
             gameManager.startGame();
+            player.performCommand("id false");
             MessageUtils.sendMessage(sender, "<green>Minijuego iniciado!</green>");
         } else if (mode.equalsIgnoreCase("stop")) {
             gameManager.stopGame();
+            player.performCommand("id true");
             MessageUtils.sendMessage(sender, "<red>Minijuego detenido!</red>");
         } else {
             MessageUtils.sendMessage(sender, "<red>Modo inválido! Usa start o stop.</red>");

@@ -1,5 +1,6 @@
 package com.spectrasonic.Acarreados.Listeners;
 
+import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Utils.ItemBuilder;
 import com.spectrasonic.Acarreados.Utils.MessageUtils;
 import org.bukkit.Material;
@@ -12,6 +13,12 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class OcelotInteractListener implements Listener {
+
+    private final GameManager gameManager;
+
+    public OcelotInteractListener(GameManager gameManager) {
+        this.gameManager = gameManager;
+    }
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
@@ -35,6 +42,9 @@ public class OcelotInteractListener implements Listener {
                 .setName("<#5069B5><b>Pingúino</b>")
                 .build();
         player.getInventory().addItem(item);
+        
+        // Respawn a new entity to maintain the count
+        gameManager.respawnOcelot();
     }
 
     private boolean hasCustomPaper(Player player) {
