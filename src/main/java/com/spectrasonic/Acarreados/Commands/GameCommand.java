@@ -7,8 +7,11 @@ import co.aikar.commands.annotation.Subcommand;
 import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Main;
 import com.spectrasonic.Acarreados.Utils.MessageUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 @CommandAlias("acarreados")
 public class GameCommand extends BaseCommand {
@@ -32,6 +35,7 @@ public class GameCommand extends BaseCommand {
         } else if (mode.equalsIgnoreCase("stop")) {
             gameManager.stopGame();
             player.performCommand("id true");
+            removeCustomPaperFromAllPlayers();
             MessageUtils.sendMessage(sender, "<red>Minijuego detenido!</red>");
         } else {
             MessageUtils.sendMessage(sender, "<red>Modo inválido! Usa start o stop.</red>");
@@ -42,5 +46,27 @@ public class GameCommand extends BaseCommand {
     public void onReload(CommandSender sender) {
         gameManager.loadConfig();
         MessageUtils.sendMessage(sender, "<green>Configuración recargada!</green>");
+    }
+    
+    /**
+     * Removes the custom paper item (Pingüino) from all online players' inventories
+     */
+    private void removeCustomPaperFromAllPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            for (ItemStack item : player.getInventory().getContents()) {
+                if (isCustomPaper(item)) {
+                    player.getInventory().remove(item);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Checks if an item is the custom paper (Pingüino)
+     */
+    private boolean isCustomPaper(ItemStack item) {
+        return item != null && item.getType() == Material.PAPER &&
+                item.hasItemMeta() && item.getItemMeta().hasCustomModelData() &&
+                item.getItemMeta().getCustomModelData() == 1047;
     }
 }
