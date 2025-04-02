@@ -46,20 +46,28 @@ public class BlockInteractListener implements Listener {
     }
 
     private boolean hasCustomPaper(Player player) {
+        // Check main inventory
         for (ItemStack item : player.getInventory().getContents()) {
             if (isCustomPaper(item)) {
                 return true;
             }
         }
-        return false;
+        // Check offhand slot
+        return isCustomPaper(player.getInventory().getItemInOffHand());
     }
 
     private void removeCustomPaper(Player player) {
+        // Check main inventory
         for (ItemStack item : player.getInventory().getContents()) {
             if (isCustomPaper(item)) {
                 player.getInventory().remove(item);
                 break; // Remove only one item
             }
+        }
+        // Check offhand slot
+        ItemStack offhand = player.getInventory().getItemInOffHand();
+        if (isCustomPaper(offhand)) {
+            player.getInventory().setItemInOffHand(null);
         }
     }
 

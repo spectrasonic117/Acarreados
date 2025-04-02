@@ -47,20 +47,26 @@ public class GameCommand extends BaseCommand {
         gameManager.loadConfig();
         MessageUtils.sendMessage(sender, "<green>Configuración recargada!</green>");
     }
-    
+
     /**
      * Removes the custom paper item (Pingüino) from all online players' inventories
      */
     private void removeCustomPaperFromAllPlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
+            // Check main inventory
             for (ItemStack item : player.getInventory().getContents()) {
                 if (isCustomPaper(item)) {
                     player.getInventory().remove(item);
                 }
             }
+            // Check offhand slot
+            ItemStack offhand = player.getInventory().getItemInOffHand();
+            if (isCustomPaper(offhand)) {
+                player.getInventory().setItemInOffHand(null);
+            }
         }
     }
-    
+
     /**
      * Checks if an item is the custom paper (Pingüino)
      */
