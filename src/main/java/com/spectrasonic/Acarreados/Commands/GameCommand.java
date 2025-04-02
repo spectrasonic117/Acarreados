@@ -8,10 +8,8 @@ import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Main;
 import com.spectrasonic.Acarreados.Utils.MessageUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 @CommandAlias("acarreados")
 public class GameCommand extends BaseCommand {
@@ -48,31 +46,10 @@ public class GameCommand extends BaseCommand {
         MessageUtils.sendMessage(sender, "<green>Configuración recargada!</green>");
     }
 
-    /**
-     * Removes the custom paper item (Pingüino) from all online players' inventories
-     */
     private void removeCustomPaperFromAllPlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            // Check main inventory
-            for (ItemStack item : player.getInventory().getContents()) {
-                if (isCustomPaper(item)) {
-                    player.getInventory().remove(item);
-                }
-            }
-            // Check offhand slot
-            ItemStack offhand = player.getInventory().getItemInOffHand();
-            if (isCustomPaper(offhand)) {
-                player.getInventory().setItemInOffHand(null);
-            }
+            player.getInventory().clear(); // Clear main inventory
         }
     }
 
-    /**
-     * Checks if an item is the custom paper (Pingüino)
-     */
-    private boolean isCustomPaper(ItemStack item) {
-        return item != null && item.getType() == Material.PAPER &&
-                item.hasItemMeta() && item.getItemMeta().hasCustomModelData() &&
-                item.getItemMeta().getCustomModelData() == 1047;
-    }
 }
