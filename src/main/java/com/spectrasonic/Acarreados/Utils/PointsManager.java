@@ -15,14 +15,14 @@ public class PointsManager {
     public void addPoints(Player player, int amount) {
         String playerName = player.getName();
         String command = "2dgamepoints add " + playerName + " " + amount;
-        String screen_point = "playglow " + playerName + " green 1 3 1 50 75";
+        String screen_point = "playglow " + playerName + " green 0.1 0.5 0.1 75 50";
         executeCommand(command, screen_point);
     }
 
     public void subtractPoints(Player player, int amount) {
         String playerName = player.getName();
         String command = "2dgamepoints subtract " + playerName + " " + amount;
-        String screen_point = "playglow " + playerName + " red 1 3 1 50 75";
+        String screen_point = "playglow " + playerName + " red 0.1 0.5 0.1 75 50";
         executeCommand(command, screen_point);
     }
 
