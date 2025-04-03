@@ -6,7 +6,6 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Ocelot;
@@ -14,7 +13,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 @Getter
-@RequiredArgsConstructor
 public class GameManager {
 
     private final Main plugin;
@@ -23,26 +21,38 @@ public class GameManager {
     private Region scoreRegion;
     private int spawnCount;
 
+    public GameManager(Main plugin) {
+        this.plugin = plugin;
+        loadConfig();
+    }
+
     public void loadConfig() {
         plugin.reloadConfig();
+
+        // Cargar región de spawn
         int spawnX1 = plugin.getConfig().getInt("regions.spawn.pos1.x");
         int spawnY1 = plugin.getConfig().getInt("regions.spawn.pos1.y");
         int spawnZ1 = plugin.getConfig().getInt("regions.spawn.pos1.z");
         int spawnX2 = plugin.getConfig().getInt("regions.spawn.pos2.x");
         int spawnY2 = plugin.getConfig().getInt("regions.spawn.pos2.y");
         int spawnZ2 = plugin.getConfig().getInt("regions.spawn.pos2.z");
-
         spawnRegion = new Region(spawnX1, spawnY1, spawnZ1, spawnX2, spawnY2, spawnZ2);
 
-        int scoreX1 = plugin.getConfig().getInt("regions.score.pos1.x");
-        int scoreY1 = plugin.getConfig().getInt("regions.score.pos1.y");
-        int scoreZ1 = plugin.getConfig().getInt("regions.score.pos1.z");
-        int scoreX2 = plugin.getConfig().getInt("regions.score.pos2.x");
-        int scoreY2 = plugin.getConfig().getInt("regions.score.pos2.y");
-        int scoreZ2 = plugin.getConfig().getInt("regions.score.pos2.z");
+        // Cargar región de score con verificación de null
+        if (plugin.getConfig().isSet("regions.score")) {
+            int scoreX1 = plugin.getConfig().getInt("regions.score.pos1.x");
+            int scoreY1 = plugin.getConfig().getInt("regions.score.pos1.y");
+            int scoreZ1 = plugin.getConfig().getInt("regions.score.pos1.z");
+            int scoreX2 = plugin.getConfig().getInt("regions.score.pos2.x");
+            int scoreY2 = plugin.getConfig().getInt("regions.score.pos2.y");
+            int scoreZ2 = plugin.getConfig().getInt("regions.score.pos2.z");
+            scoreRegion = new Region(scoreX1, scoreY1, scoreZ1, scoreX2, scoreY2, scoreZ2);
+        } else {
+            plugin.getLogger().warning("Score region not configured in config.yml!");
+            scoreRegion = new Region(0, 0, 0, 0, 0, 0); // Región por defecto
+        }
 
         spawnCount = plugin.getConfig().getInt("spawn-count", 100);
-        scoreRegion = new Region(scoreX1, scoreY1, scoreZ1, scoreX2, scoreY2, scoreZ2);
     }
 
     public void startGame() {
