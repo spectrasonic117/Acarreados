@@ -41,7 +41,12 @@ public class OcelotInteractListener implements Listener {
                 .setCustomModelData(1047)
                 .setName("<#5069B5><b>Pingúino</b>")
                 .build();
-        player.getInventory().addItem(item);
+
+        int mainHandSlot = player.getInventory().getHeldItemSlot();
+        
+        player.getInventory().setItem(mainHandSlot, item);
+
+        
         
         // Respawn a new entity to maintain the count
         gameManager.respawnOcelot();
