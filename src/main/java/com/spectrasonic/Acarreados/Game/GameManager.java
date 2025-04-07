@@ -80,6 +80,7 @@ public class GameManager {
             // Hacer invisible la entidad sin mostrar partículas
             ocelot.setInvisible(true);
             ocelot.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+            ocelot.setInvulnerable(true);
 
             // Crear entidad modelada y asignar el modelo "bebe_pinguino"
             ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(ocelot);
