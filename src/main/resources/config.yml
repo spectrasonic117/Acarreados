@@ -8,3 +8,9 @@ regions:
         pos2: { x: -106, y: 62, z: -265 }
 
 spawn-count: 100
+
+mama_pinguino_spawn:
+    world: "world"
+    x: 6440.5
+    y: 37
+    z: -11608.5

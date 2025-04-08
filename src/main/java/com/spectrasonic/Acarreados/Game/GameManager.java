@@ -20,6 +20,8 @@ public class GameManager {
     private Region spawnRegion;
     private Region scoreRegion;
     private int spawnCount;
+    private MamaPinguinoManager mamaPinguinoManager = new MamaPinguinoManager();
+    private Location mamaPinguinoLocation;
 
     public GameManager(Main plugin) {
         this.plugin = plugin;
@@ -29,7 +31,6 @@ public class GameManager {
     public void loadConfig() {
         plugin.reloadConfig();
 
-        // Cargar región de spawn
         int spawnX1 = plugin.getConfig().getInt("regions.spawn.pos1.x");
         int spawnY1 = plugin.getConfig().getInt("regions.spawn.pos1.y");
         int spawnZ1 = plugin.getConfig().getInt("regions.spawn.pos1.z");
@@ -38,7 +39,6 @@ public class GameManager {
         int spawnZ2 = plugin.getConfig().getInt("regions.spawn.pos2.z");
         spawnRegion = new Region(spawnX1, spawnY1, spawnZ1, spawnX2, spawnY2, spawnZ2);
 
-        // Cargar región de score con verificación de null
         if (plugin.getConfig().isSet("regions.score")) {
             int scoreX1 = plugin.getConfig().getInt("regions.score.pos1.x");
             int scoreY1 = plugin.getConfig().getInt("regions.score.pos1.y");
@@ -49,40 +49,40 @@ public class GameManager {
             scoreRegion = new Region(scoreX1, scoreY1, scoreZ1, scoreX2, scoreY2, scoreZ2);
         } else {
             plugin.getLogger().warning("Score region not configured in config.yml!");
-            scoreRegion = new Region(0, 0, 0, 0, 0, 0); // Región por defecto
+            scoreRegion = new Region(0, 0, 0, 0, 0, 0);
         }
 
         spawnCount = plugin.getConfig().getInt("spawn-count", 100);
+
+        String worldName = plugin.getConfig().getString("mama_pinguino_spawn.world", "world");
+        int x = plugin.getConfig().getInt("mama_pinguino_spawn.x");
+        int y = plugin.getConfig().getInt("mama_pinguino_spawn.y");
+        int z = plugin.getConfig().getInt("mama_pinguino_spawn.z");
+        mamaPinguinoLocation = new Location(plugin.getServer().getWorld(worldName), x, y, z, 0F, 0F);
     }
 
     public void startGame() {
         running = true;
         spawnOcelots();
+        mamaPinguinoManager.spawnMamaPinguino(mamaPinguinoLocation);
     }
 
     public void stopGame() {
         running = false;
         removeAllOcelots();
+        mamaPinguinoManager.removeMamaPinguino();
     }
 
-    /**
-     * Se generan spawnCount ocelotes dentro de la región de spawn, ubicándolos 1
-     * bloque por encima para evitar sofocamientos,
-     * se les aplica un efecto de invisibilidad sin partículas y se les asigna el
-     * modelo "bebe_pinguino" mediante ModelEngine.
-     */
     private void spawnOcelots() {
         for (int i = 0; i < spawnCount; i++) {
             Location loc = getRandomLocationInRegion(spawnRegion);
             loc.add(0, 1, 0);
             Ocelot ocelot = loc.getWorld().spawn(loc, Ocelot.class);
 
-            // Hacer invisible la entidad sin mostrar partículas
             ocelot.setInvisible(true);
             ocelot.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
             ocelot.setInvulnerable(true);
 
-            // Crear entidad modelada y asignar el modelo "bebe_pinguino"
             ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(ocelot);
             ActiveModel activeModel = ModelEngineAPI.createActiveModel("bebe_pinguino");
             modeledEntity.addModel(activeModel, true);
@@ -115,11 +115,9 @@ public class GameManager {
         loc.add(0, 1, 0);
         Ocelot ocelot = loc.getWorld().spawn(loc, Ocelot.class);
 
-        // Hacer invisible la entidad sin mostrar partículas
         ocelot.setInvisible(true);
         ocelot.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
 
-        // Crear entidad modelada y asignar el modelo "bebe_pinguino"
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(ocelot);
         ActiveModel activeModel = ModelEngineAPI.createActiveModel("bebe_pinguino");
         modeledEntity.addModel(activeModel, true);
