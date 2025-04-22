@@ -2,15 +2,10 @@ package com.spectrasonic.Acarreados.Game;
 
 import com.spectrasonic.Acarreados.Main;
 import com.spectrasonic.Acarreados.Utils.Region;
-import com.ticxo.modelengine.api.ModelEngineAPI;
-import com.ticxo.modelengine.api.model.ActiveModel;
-import com.ticxo.modelengine.api.model.ModeledEntity;
 import lombok.Getter;
-
 import org.bukkit.Location;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.entity.Allay;
+import org.bukkit.entity.Entity;
 
 @Getter
 public class GameManager {
@@ -63,36 +58,31 @@ public class GameManager {
 
     public void startGame() {
         running = true;
-        spawnOcelots();
+        spawnAllays();
         mamaPinguinoManager.spawnMamaPinguino(mamaPinguinoLocation);
     }
 
     public void stopGame() {
         running = false;
-        removeAllOcelots();
+        removeAllAllays();
         mamaPinguinoManager.removeMamaPinguino();
     }
 
-    private void spawnOcelots() {
+    private void spawnAllays() {
         for (int i = 0; i < spawnCount; i++) {
             Location loc = getRandomLocationInRegion(spawnRegion);
             loc.add(0, 1, 0);
-            Ocelot ocelot = loc.getWorld().spawn(loc, Ocelot.class);
-
-            ocelot.setInvisible(true);
-            ocelot.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
-            ocelot.setInvulnerable(true);
-
-            ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(ocelot);
-            ActiveModel activeModel = ModelEngineAPI.createActiveModel("bebe_pinguino");
-            modeledEntity.addModel(activeModel, true);
+            Allay allay = loc.getWorld().spawn(loc, Allay.class);
+            allay.setAI(false);
+            allay.setInvulnerable(true);
+            allay.setSilent(true);
         }
     }
 
-    private void removeAllOcelots() {
+    private void removeAllAllays() {
         plugin.getServer().getWorlds().get(0).getEntities().stream()
-                .filter(entity -> entity instanceof Ocelot)
-                .forEach(entity -> entity.remove());
+                .filter(entity -> entity instanceof Allay)
+                .forEach(Entity::remove);
     }
 
     private Location getRandomLocationInRegion(Region region) {
@@ -107,19 +97,15 @@ public class GameManager {
         return new Location(plugin.getServer().getWorlds().get(0), x, y, z);
     }
 
-    public void respawnOcelot() {
+    public void respawnAllay() {
         if (!running)
             return;
 
         Location loc = getRandomLocationInRegion(spawnRegion);
         loc.add(0, 1, 0);
-        Ocelot ocelot = loc.getWorld().spawn(loc, Ocelot.class);
+        Allay allay = loc.getWorld().spawn(loc, Allay.class);
 
-        ocelot.setInvisible(true);
-        ocelot.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
-
-        ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(ocelot);
-        ActiveModel activeModel = ModelEngineAPI.createActiveModel("bebe_pinguino");
-        modeledEntity.addModel(activeModel, true);
+        allay.setAI(false);
+        allay.setInvulnerable(true);
     }
 }

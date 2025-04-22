@@ -3,9 +3,11 @@ package com.spectrasonic.Acarreados.Listeners;
 import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Utils.ItemBuilder;
 import com.spectrasonic.Acarreados.Utils.MessageUtils;
+import com.spectrasonic.Acarreados.Utils.SoundUtils;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Allay;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +25,7 @@ public class OcelotInteractListener implements Listener {
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Entity clicked = event.getRightClicked();
-        if (!(clicked instanceof Ocelot))
+        if (!(clicked instanceof Allay))
             return;
 
         Player player = event.getPlayer();
@@ -32,24 +34,25 @@ public class OcelotInteractListener implements Listener {
             return;
         }
 
-        // En lugar de remover el modelo, se mata al ocelote (se asigna 0 de salud)
-        Ocelot ocelot = (Ocelot) clicked;
-        ocelot.setHealth(0.0D);
+        // En lugar de remover el modelo, se elimina el Allay del mundo
+        Allay allay = (Allay) clicked;
+        allay.remove();
 
-        // Se genera el item especial y se entrega al jugador
+        // Se genera el item especial y se entrega al jugador usando ItemBuilder
         ItemStack item = ItemBuilder.setMaterial("PAPER")
                 .setCustomModelData(1047)
-                .setName("<#5069B5><b>Pingúino</b>")
+                .setName("<#5069B5><b>Pinguino</b>")
                 .build();
 
         int mainHandSlot = player.getInventory().getHeldItemSlot();
         
         player.getInventory().setItem(mainHandSlot, item);
 
-        
+        // Reproducir sonido
+        SoundUtils.playerSound(player, Sound.ENTITY_OCELOT_DEATH, 1.0F, 1.0F);
         
         // Respawn a new entity to maintain the count
-        gameManager.respawnOcelot();
+        gameManager.respawnAllay();
     }
 
     private boolean hasCustomPaper(Player player) {
