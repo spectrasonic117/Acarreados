@@ -3,6 +3,7 @@ package com.spectrasonic.Acarreados.Commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
+import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
 import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Main;
@@ -12,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandAlias("acarreados")
+@CommandPermission("acarreados.admin")
 public class GameCommand extends BaseCommand {
 
     private final Main plugin;
