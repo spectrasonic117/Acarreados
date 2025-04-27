@@ -3,4 +3,14 @@ version: "${version}"
 main: com.spectrasonic.Acarreados.Main
 api-version: "1.21"
 authors: [Spectrasonic]
-depend: [ModelEngine]
+depend: [ModelEngine, MediaPlayerSpigot, GeoWarePlugin]
+commands:
+    acarreados:
+        description: Comando principal del plugin Acarreados
+        usage: /acarreados <game|reload>
+        aliases: [acarreados]
+
+permissions:
+    acarreados.admin:
+        description: Permite el acceso a los comandos administrativos de Acarreados
+        default: op
