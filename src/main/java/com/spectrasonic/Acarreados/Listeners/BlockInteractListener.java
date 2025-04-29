@@ -36,11 +36,13 @@ public class BlockInteractListener implements Listener {
         if (!hasCustomPaper(player))
             return;
 
-        SoundUtils.playerSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
-        MessageUtils.sendActionBar(player, "<green><bold>+1 Punto");
+        int currentRound = gameManager.getCurrentRound();
+        int pointsToAward = currentRound; 
 
-        // ponint manager
-        pointsManager.addPoints(player, 1);
+        SoundUtils.playerSound(player, Sound.BLOCK_NOTE_BLOCK_PLING, 1, 2);
+        MessageUtils.sendActionBar(player, "<green><bold>+" + pointsToAward + " Punto" + (pointsToAward > 1 ? "s" : ""));
+
+        pointsManager.addPoints(player, pointsToAward);
 
         removeCustomPaper(player);
     }

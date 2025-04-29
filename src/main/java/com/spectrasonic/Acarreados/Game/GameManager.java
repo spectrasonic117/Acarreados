@@ -17,6 +17,7 @@ public class GameManager {
     private int spawnCount;
     private MamaPinguinoManager mamaPinguinoManager = new MamaPinguinoManager();
     private Location mamaPinguinoLocation;
+    private int currentRound = 0;
 
     public GameManager(Main plugin) {
         this.plugin = plugin;
@@ -56,7 +57,11 @@ public class GameManager {
         mamaPinguinoLocation = new Location(plugin.getServer().getWorld(worldName), x, y, z, 0F, 0F);
     }
 
-    public void startGame() {
+    public void startGame(int round) {
+        if (running) {
+            plugin.getLogger().warning("Attempted to start game while it was already running.");
+        }
+        this.currentRound = round;
         running = true;
         spawnAllays();
         mamaPinguinoManager.spawnMamaPinguino(mamaPinguinoLocation);
@@ -64,6 +69,7 @@ public class GameManager {
 
     public void stopGame() {
         running = false;
+        currentRound = 0;
         removeAllAllays();
         mamaPinguinoManager.removeMamaPinguino();
     }
@@ -107,5 +113,9 @@ public class GameManager {
 
         allay.setAI(false);
         allay.setInvulnerable(true);
+    }
+
+    public int getCurrentRound() {
+        return this.currentRound;
     }
 }

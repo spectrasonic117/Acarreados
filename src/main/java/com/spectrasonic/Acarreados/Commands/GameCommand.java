@@ -1,10 +1,7 @@
 package com.spectrasonic.Acarreados.Commands;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandCompletion;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.annotation.*;
 import com.spectrasonic.Acarreados.Game.GameManager;
 import com.spectrasonic.Acarreados.Main;
 import com.spectrasonic.Acarreados.Utils.MessageUtils;
@@ -24,25 +21,39 @@ public class GameCommand extends BaseCommand {
         this.gameManager = gameManager;
     }
 
-    @Subcommand("game")
-    @CommandCompletion("start|stop")
-    public void onGame(CommandSender sender, String mode) {
-        Player player = (Player) sender;
-        if (mode.equalsIgnoreCase("start")) {
-            gameManager.startGame();
+    @Subcommand("game start")
+    @CommandCompletion("@range:1-3") 
+    @Description("Starts the Acarreados minigame in a specific round.")
+    public void onGameStart(CommandSender sender, @Conditions("limits:min=1,max=3") int round) {
+        Player player = (sender instanceof Player) ? (Player) sender : null; 
+        gameManager.startGame(round);
+
+        if (player != null) {
             player.performCommand("id false");
-            MessageUtils.sendMessage(sender, "<green>Minijuego iniciado!</green>");
-        } else if (mode.equalsIgnoreCase("stop")) {
-            gameManager.stopGame();
-            player.performCommand("id true");
-            removeCustomPaperFromAllPlayers();
-            MessageUtils.sendMessage(sender, "<red>Minijuego detenido!</red>");
-        } else {
-            MessageUtils.sendMessage(sender, "<red>Modo inválido! Usa start o stop.</red>");
         }
+
+        MessageUtils.sendMessage(sender, "<green>Minijuego iniciado! Ronda " + round + "</green>");
     }
 
+    // Define the 'game stop' subcommand
+    @Subcommand("game stop")
+    @Description("Stops the Acarreados minigame.")
+    public void onGameStop(CommandSender sender) {
+        Player player = (sender instanceof Player) ? (Player) sender : null; // Get player if sender is one
+
+        gameManager.stopGame();
+
+        if (player != null) {
+            player.performCommand("id true"); // Execute command only if sender is a player
+        }
+
+        removeCustomPaperFromAllPlayers();
+        MessageUtils.sendMessage(sender, "<red>Minijuego detenido!</red>");
+    }
+
+
     @Subcommand("reload")
+    @Description("Reloads the Acarreados configuration.")
     public void onReload(CommandSender sender) {
         gameManager.loadConfig();
         MessageUtils.sendMessage(sender, "<green>Configuración recargada!</green>");
@@ -53,5 +64,4 @@ public class GameCommand extends BaseCommand {
             player.getInventory().clear(); // Clear main inventory
         }
     }
-
 }
